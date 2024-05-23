@@ -1,0 +1,24 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       String    @id @unique @default(uuid())
+  email    String    @unique
+  name     String
+  password String
+  Payable  Payable[]
+}
+
+model Payable {
+  id           String   @id @default(uuid())
+  value        Float
+  emissionDate DateTime
+  assignor     String
+  User         User     @relation(fields: [assignor], references: [id])
+}
