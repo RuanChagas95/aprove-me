@@ -4,23 +4,27 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from '../database/prisma.service';
 import { UUID } from 'crypto';
 
+const userSelect = {
+  id: true,
+  email: true,
+  name: true,
+  document: true,
+  phone: true,
+};
+
 @Injectable()
 export class UsersService {
   constructor(readonly prisma: PrismaService) {}
   async create(createUserDto: CreateUserDto, password: string) {
     const user = await this.prisma.user.create({
       data: { ...createUserDto, password },
+      select: userSelect,
     });
-    delete user.password;
     return { user };
   }
 
-  findAll() {
-    return `This action returns all users`;
-  }
-
   findOne(id: UUID) {
-    return `This action returns a #${id} user`;
+    return this.prisma.user.findUnique({ where: { id }, select: userSelect });
   }
 
   async update(
@@ -28,11 +32,12 @@ export class UsersService {
     updateUserDto: UpdateUserDto,
     password: string = null,
   ) {
-    return this.prisma.user.update({
+    const user = await this.prisma.user.update({
       where: { id },
       data: { ...updateUserDto, ...(password && { password }) },
-      select: { id: true },
+      select: userSelect,
     });
+    return { user };
   }
 
   remove(id: UUID) {
