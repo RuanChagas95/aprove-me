@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Param, Delete } from '@nestjs/common';
 import { PayablesService } from './payables.service';
 import { CreatePayableDto } from './dto/create-payable.dto';
 
-@Controller('payables')
+@Controller('/integrations/payables')
 export class PayablesController {
   constructor(private readonly payablesService: PayablesService) {}
 
