@@ -12,6 +12,7 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Response } from 'express';
+import { generateJWT } from 'src/utils/jwt';
 
 @Controller('/integrations/assignor')
 export class UsersController {
@@ -23,8 +24,8 @@ export class UsersController {
       createUserDto,
       res.locals.password,
     );
-
-    res.json('jwt token here');
+    const token = generateJWT({ id: user.id });
+    res.json({ token });
   }
 
   @Get()
