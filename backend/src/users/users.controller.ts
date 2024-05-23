@@ -43,8 +43,12 @@ export class UsersController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: UUID, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(id, updateUserDto);
+  update(
+    @Param('id') id: UUID,
+    @Body() updateUserDto: UpdateUserDto,
+    @Req() req: RequestWithPassword,
+  ) {
+    return this.usersService.update(id, updateUserDto, req.hashPassword);
   }
 
   @Delete(':id')
