@@ -17,5 +17,6 @@ export class CreateUserDto {
   name: string;
 
   @IsString()
+  @Length(8, 140)
   password: string;
 }
