@@ -41,6 +41,6 @@ export class UsersService {
   }
 
   remove(id: UUID) {
-    return `This action removes a #${id} user`;
+    return this.prisma.user.delete({ where: { id } });
   }
 }
