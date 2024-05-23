@@ -9,6 +9,7 @@ export class UsersService {
   async create(createUserDto: CreateUserDto, password: string) {
     return this.prisma.user.create({
       data: { ...createUserDto, password },
+      select: { id: true },
     });
   }
 

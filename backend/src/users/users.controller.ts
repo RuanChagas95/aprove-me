@@ -24,8 +24,8 @@ export class UsersController {
       createUserDto,
       res.locals.password,
     );
-    const token = generateJWT({ id: user.id });
-    res.json({ token });
+    const token = generateJWT(user);
+    res.json({ token, user });
   }
 
   @Get()
