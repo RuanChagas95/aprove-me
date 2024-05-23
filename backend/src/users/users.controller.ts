@@ -6,28 +6,31 @@ import {
   Patch,
   Param,
   Delete,
-  Res,
+  Req,
+  UseInterceptors,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { Response } from 'express';
-import { generateJWT } from 'src/utils/jwt';
+import { RequestWithPassword } from 'src/types';
+import { InjectJwtInterceptor } from 'src/interceptors/injectJWT.service';
 
 @Controller('/integrations/assignor')
+@UseInterceptors(new InjectJwtInterceptor())
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  async create(@Body() createUserDto: CreateUserDto, @Res() res: Response) {
+  async create(
+    @Body() createUserDto: CreateUserDto,
+    @Req() req: RequestWithPassword,
+  ) {
     const user = await this.usersService.create(
       createUserDto,
-      res.locals.password,
+      req.hashPassword,
     );
-    const token = generateJWT(user);
-    res.json({ token, user });
+    return user;
   }
-
   @Get()
   findAll() {
     return this.usersService.findAll();
