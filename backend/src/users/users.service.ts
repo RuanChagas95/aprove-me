@@ -17,15 +17,31 @@ const userSelect = {
 export class UsersService {
   constructor(readonly prisma: PrismaService) {}
   async create(createUserDto: CreateUserDto, password: string) {
-    const user = await this.prisma.user.create({
-      data: { ...createUserDto, password },
-      select: userSelect,
-    });
-    return { user };
+    try {
+      const user = await this.prisma.user.create({
+        data: { ...createUserDto, password },
+        select: userSelect,
+      });
+      return { user };
+    } catch (error) {
+      if (
+        error.code === 'P2002' &&
+        error.meta.target[0] === 'email' &&
+        error.meta.target.length === 1
+      ) {
+        return null;
+      }
+      throw error;
+    }
   }
 
-  findOne(id: UUID) {
-    return this.prisma.user.findUnique({ where: { id }, select: userSelect });
+  async findOne(id: UUID) {
+    return {
+      user: await this.prisma.user.findUnique({
+        where: { id },
+        select: userSelect,
+      }),
+    };
   }
 
   async update(
@@ -53,6 +69,6 @@ export class UsersService {
     const isValid = await compare(password, user.password);
     if (!isValid) return null;
     delete user.password;
-    return user;
+    return { user };
   }
 }
