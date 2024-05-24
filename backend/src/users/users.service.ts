@@ -69,6 +69,6 @@ export class UsersService {
     const isValid = await compare(password, user.password);
     if (!isValid) return null;
     delete user.password;
-    return user;
+    return { user };
   }
 }
