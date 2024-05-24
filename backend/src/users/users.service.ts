@@ -3,6 +3,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from '../database/prisma.service';
 import { UUID } from 'crypto';
+import { compare } from 'bcrypt';
 
 const userSelect = {
   id: true,
@@ -42,5 +43,16 @@ export class UsersService {
 
   remove(id: UUID) {
     return this.prisma.user.delete({ where: { id } });
+  }
+
+  async auth({ login, password }) {
+    const user = await this.prisma.user.findUnique({
+      where: { email: login },
+    });
+    if (!user) return null;
+    const isValid = await compare(password, user.password);
+    if (!isValid) return null;
+    delete user.password;
+    return user;
   }
 }

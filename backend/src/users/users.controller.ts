@@ -8,6 +8,7 @@ import {
   Delete,
   Req,
   UseInterceptors,
+  HttpException,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -15,13 +16,14 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { RequestWithPassword } from 'src/types';
 import { InjectJwtInterceptor } from 'src/interceptors/injectJWT.service';
 import { UUID } from 'crypto';
+import { AuthUserDto } from './dto/auth-user.dto';
 
-@Controller('/integrations/assignor')
+@Controller('/integrations')
 @UseInterceptors(new InjectJwtInterceptor())
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Post()
+  @Post('/assignor')
   async create(
     @Body() createUserDto: CreateUserDto,
     @Req() req: RequestWithPassword,
@@ -32,12 +34,23 @@ export class UsersController {
     );
     return user;
   }
-  @Get(':id')
+
+  @Post('/auth')
+  async auth(@Body() authUserDto: AuthUserDto) {
+    const user = await this.usersService.auth(authUserDto);
+
+    if (!user) {
+      throw new HttpException('Unauthorized', 401);
+    }
+    return { user };
+  }
+
+  @Get('/assignor/:id')
   findOne(@Param('id') id: UUID) {
     return this.usersService.findOne(id);
   }
 
-  @Patch(':id')
+  @Patch('/assignor/:id')
   update(
     @Param('id') id: UUID,
     @Body() updateUserDto: UpdateUserDto,
@@ -46,7 +59,7 @@ export class UsersController {
     return this.usersService.update(id, updateUserDto, req.hashPassword);
   }
 
-  @Delete(':id')
+  @Delete('/assignor/:id')
   remove(@Param('id') id: UUID) {
     return this.usersService.remove(id);
   }
