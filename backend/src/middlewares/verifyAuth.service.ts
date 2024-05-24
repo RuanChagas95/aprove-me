@@ -15,12 +15,13 @@ export class VerifyAuth implements NestMiddleware {
       const token = req.headers['authorization'].replace('Bearer ', '');
       const payload = verifyJWT(token);
       req.user = payload;
-      const id = req.params[0].split('/').pop();
+      const id = req.params.id;
 
       if (id && payload.id !== id) {
         throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
       }
+      return next();
     }
-    next();
+    throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
   }
 }
