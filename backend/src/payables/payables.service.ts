@@ -1,26 +1,31 @@
 import { Injectable } from '@nestjs/common';
 import { CreatePayableDto } from './dto/create-payable.dto';
 import { UpdatePayableDto } from './dto/update-payable.dto';
+import { UUID } from 'crypto';
+import { PrismaService } from '../database/prisma.service';
 
 @Injectable()
 export class PayablesService {
-  create(createPayableDto: CreatePayableDto) {
-    return 'This action adds a new payable';
+  constructor(readonly prisma: PrismaService) {}
+
+  create(createPayableDto: CreatePayableDto, assignor: UUID) {
+    return this.prisma.payable.create({
+      data: { ...createPayableDto, assignor },
+    });
   }
 
-  findAll() {
-    return `This action returns all payables`;
+  findOne(id: UUID) {
+    return this.prisma.payable.findUnique({ where: { id } });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} payable`;
+  update(id: UUID, updatePayableDto: UpdatePayableDto) {
+    return this.prisma.payable.update({
+      where: { id },
+      data: updatePayableDto,
+    });
   }
 
-  update(id: number, updatePayableDto: UpdatePayableDto) {
-    return `This action updates a #${id} payable`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} payable`;
+  remove(id: UUID) {
+    return this.prisma.user.delete({ where: { id } });
   }
 }

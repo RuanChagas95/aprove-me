@@ -1,7 +1,7 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
 import { Response, NextFunction } from 'express';
 import * as bcrypt from 'bcrypt';
-import { RequestWithPassword } from 'src/types';
+import { RequestWithPassword } from '../../types';
 
 @Injectable()
 export class EncryptPasswordMiddleware implements NestMiddleware {

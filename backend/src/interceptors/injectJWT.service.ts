@@ -6,8 +6,8 @@ import {
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { CommonUser } from 'src/types';
-import { generateJWT } from 'src/utils/jwt';
+import { CommonUser } from '../types';
+import { generateJWT } from '../utils/jwt';
 
 @Injectable()
 export class InjectJwtInterceptor implements NestInterceptor {
