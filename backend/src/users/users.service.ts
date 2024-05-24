@@ -35,8 +35,13 @@ export class UsersService {
     }
   }
 
-  findOne(id: UUID) {
-    return this.prisma.user.findUnique({ where: { id }, select: userSelect });
+  async findOne(id: UUID) {
+    return {
+      user: await this.prisma.user.findUnique({
+        where: { id },
+        select: userSelect,
+      }),
+    };
   }
 
   async update(
