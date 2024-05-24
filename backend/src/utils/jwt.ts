@@ -1,6 +1,6 @@
 import { HttpException } from '@nestjs/common';
 import * as jwt from 'jsonwebtoken';
-import { CommonUser } from 'src/types';
+import { CommonUser } from '../types';
 
 export const generateJWT = (payload: CommonUser) => {
   return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '60s' });

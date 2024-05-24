@@ -13,10 +13,10 @@ import {
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { RequestWithPassword } from 'src/types';
-import { InjectJwtInterceptor } from 'src/interceptors/injectJWT.service';
 import { UUID } from 'crypto';
 import { AuthUserDto } from './dto/auth-user.dto';
+import { InjectJwtInterceptor } from '../interceptors/injectJWT.service';
+import { RequestWithPassword } from '../types';
 
 @Controller('/integrations')
 @UseInterceptors(new InjectJwtInterceptor())

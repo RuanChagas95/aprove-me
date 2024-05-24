@@ -1,6 +1,6 @@
 import { HttpException, Injectable, NestMiddleware } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
-import { verifyJWT } from 'src/utils/jwt';
+import { verifyJWT } from '../utils/jwt';
 
 @Injectable()
 export class VerifyAuth implements NestMiddleware {

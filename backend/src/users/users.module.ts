@@ -1,9 +1,9 @@
 import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UsersController } from './users.controller';
-import { PrismaService } from 'src/database/prisma.service';
 import { EncryptPasswordMiddleware } from './middlewares/encryptPassword.service';
-import { VerifyAuth } from 'src/middlewares/verifyAuth.service';
+import { VerifyAuth } from '../middlewares/verifyAuth.service';
+import { PrismaService } from '../database/prisma.service';
 
 @Module({
   controllers: [UsersController],
