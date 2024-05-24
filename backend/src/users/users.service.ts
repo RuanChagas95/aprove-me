@@ -17,11 +17,22 @@ const userSelect = {
 export class UsersService {
   constructor(readonly prisma: PrismaService) {}
   async create(createUserDto: CreateUserDto, password: string) {
-    const user = await this.prisma.user.create({
-      data: { ...createUserDto, password },
-      select: userSelect,
-    });
-    return { user };
+    try {
+      const user = await this.prisma.user.create({
+        data: { ...createUserDto, password },
+        select: userSelect,
+      });
+      return { user };
+    } catch (error) {
+      if (
+        error.code === 'P2002' &&
+        error.meta.target[0] === 'email' &&
+        error.meta.target.length === 1
+      ) {
+        return null;
+      }
+      throw error;
+    }
   }
 
   findOne(id: UUID) {
