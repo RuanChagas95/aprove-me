@@ -1,4 +1,4 @@
-import { HttpException } from '@nestjs/common';
+import { HttpException, HttpStatus } from '@nestjs/common';
 import * as jwt from 'jsonwebtoken';
 import { CommonUser } from '../types';
 
@@ -10,6 +10,6 @@ export const verifyJWT = (token: string): CommonUser => {
   try {
     return jwt.verify(token, process.env.JWT_SECRET) as CommonUser;
   } catch (error) {
-    throw new HttpException('Invalid token', 401);
+    throw new HttpException('Invalid token', HttpStatus.UNAUTHORIZED);
   }
 };

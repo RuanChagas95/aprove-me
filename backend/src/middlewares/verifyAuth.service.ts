@@ -1,4 +1,9 @@
-import { HttpException, Injectable, NestMiddleware } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NestMiddleware,
+} from '@nestjs/common';
 import { Response, NextFunction } from 'express';
 import { verifyJWT } from '../utils/jwt';
 import { AuthenticatedRequest } from '../types';
@@ -13,7 +18,7 @@ export class VerifyAuth implements NestMiddleware {
       const id = req.params[0].split('/').pop();
 
       if (id && payload.id !== id) {
-        throw new HttpException('Unauthorized', 401);
+        throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
       }
     }
     next();

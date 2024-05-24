@@ -9,6 +9,7 @@ import {
   Req,
   UseInterceptors,
   HttpException,
+  HttpStatus,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -32,6 +33,9 @@ export class UsersController {
       createUserDto,
       req.hashPassword,
     );
+    if (!user) {
+      throw new HttpException('User already exists', HttpStatus.CONFLICT);
+    }
     return user;
   }
 
@@ -40,7 +44,7 @@ export class UsersController {
     const user = await this.usersService.auth(authUserDto);
 
     if (!user) {
-      throw new HttpException('Unauthorized', 401);
+      throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
     }
     return { user };
   }
