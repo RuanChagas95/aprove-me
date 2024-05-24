@@ -10,6 +10,6 @@ import { PrismaService } from '../database/prisma.service';
 })
 export class PayablesModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(VerifyAuth).forRoutes('*');
+    consumer.apply(VerifyAuth).forRoutes(PayablesController);
   }
 }

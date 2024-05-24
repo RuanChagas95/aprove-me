@@ -13,11 +13,11 @@ export class UsersModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(EncryptPasswordMiddleware)
-      .exclude({ path: '*', method: RequestMethod.GET })
-      .forRoutes('*');
+      .exclude({ path: '(.*)', method: RequestMethod.GET })
+      .forRoutes(UsersController);
     consumer
       .apply(VerifyAuth)
-      .exclude({ path: '*', method: RequestMethod.POST })
-      .forRoutes('*');
+      .exclude({ path: '(.*)', method: RequestMethod.POST })
+      .forRoutes(UsersController);
   }
 }
