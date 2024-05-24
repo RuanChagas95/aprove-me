@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { CommonUser } from 'src/types';
 import { generateJWT } from 'src/utils/jwt';
 
 @Injectable()
@@ -14,7 +15,8 @@ export class InjectJwtInterceptor implements NestInterceptor {
     return next.handle().pipe(
       tap((data) => {
         if (data) {
-          const token = generateJWT(data);
+          const user = data.user as CommonUser;
+          const token = generateJWT(user);
           data.token = token;
         }
       }),
