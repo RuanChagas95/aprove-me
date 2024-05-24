@@ -10,6 +10,7 @@ import {
   UseInterceptors,
   HttpException,
   HttpStatus,
+  HttpCode,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -39,6 +40,7 @@ export class UsersController {
     return user;
   }
 
+  @HttpCode(HttpStatus.OK)
   @Post('/auth')
   async auth(@Body() authUserDto: AuthUserDto) {
     const user = await this.usersService.auth(authUserDto);
@@ -46,7 +48,7 @@ export class UsersController {
     if (!user) {
       throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
     }
-    return { user };
+    return user;
   }
 
   @Get('/assignor/:id')
