@@ -23,7 +23,7 @@ export class PayablesController {
     @Body() createPayableDto: CreatePayableDto,
     @Req() req: AuthenticatedRequest,
   ) {
-    return this.payablesService.create(createPayableDto, req.locals.user.id);
+    return this.payablesService.create(createPayableDto, req.user.id);
   }
 
   @Patch(':id')

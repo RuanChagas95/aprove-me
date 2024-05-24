@@ -14,7 +14,7 @@ export class VerifyAuth implements NestMiddleware {
     if (req.headers['authorization']) {
       const token = req.headers['authorization'].replace('Bearer ', '');
       const payload = verifyJWT(token);
-      req.locals.user = payload;
+      req.user = payload;
       const id = req.params[0].split('/').pop();
 
       if (id && payload.id !== id) {

@@ -14,7 +14,5 @@ export type CommonUser = {
 };
 
 export type AuthenticatedRequest = {
-  locals: {
-    user: CommonUser;
-  };
+  user: CommonUser;
 } & Request;
